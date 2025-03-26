@@ -15,7 +15,7 @@ export function usePagination({
   const [currentPage, setCurrentPage] = useState(1);
 
   const paginatedData = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
+    const startIndex = Math.abs((currentPage - 1) * itemsPerPage);
     const endIndex = startIndex + itemsPerPage;
     return data?.slice(startIndex, endIndex);
   }, [dataLength, currentPage, itemsPerPage]);
@@ -33,13 +33,13 @@ export function usePagination({
   };
 
 
-
   return {
     currentPage,
     paginatedData,
     nextPage,
     prevPage,
-    totalPages
+    totalPages,
+    setCurrentPage
     
   };
 }

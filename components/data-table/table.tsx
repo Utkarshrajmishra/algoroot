@@ -39,7 +39,7 @@ export function DataTable({ recipes }: Props) {
                   <p
                     className={`px-3  p- ${
                       item.difficulty === "Easy"
-                        ? "bg-emerald-700"
+                        ? "bg-emerald-500"
                         : item.difficulty === "Medium"
                         ? "bg-yellow-500"
                         : "bg-red-500"

@@ -42,7 +42,7 @@ const Menu = [
 
 const Sidebar = () => {
   return (
-    <div className="w-[280px] bg-black/20 border-r border-r-zinc-800 flex flex-col h-screen justify-between">
+    <div className="w-[280px] hidden bg-black/20 border-r border-r-zinc-800 flex flex-col h-screen justify-between">
       <div>
         <div className="flex-none px-4 py-4">
           <section className="w-full bg-zinc-900 hover:bg-zinc-800/50 transition-all duration-200 border border-zinc-800/30 rounded-lg p-2.5 flex items-center justify-between group">
