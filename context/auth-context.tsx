@@ -25,7 +25,7 @@ type AuthContextType = {
   logout: () => void;
 };
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -37,11 +37,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const foundUser = user.find((u: User) => u.email === email);
     if (!foundUser || foundUser.password !== password) {
       setLoading(false);
-      return { success: false, message: "Invalid email or password" };
+      return { success: false, message: "Invalid email or password", id:"" };
     }
     setLoading(true);
     setUser(foundUser);
-    return { success: true, message: "Login successfull" };
+    return { success: true, message: "Login successfull", id: foundUser.id };
   };
 
   const signUp = (email: string, password: string, name: string) => {

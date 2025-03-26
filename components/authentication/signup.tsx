@@ -1,6 +1,5 @@
-"use client"
+"use client";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,40 +10,48 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useActionState, useContext, useState } from "react";
+import { handleForm, SignupSchemaTypes } from "@/actions/signup-action";
+import { AuthContext } from "@/context/auth-context";
 
 export function SignupForm({
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<"div">) {
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+  setLogin,
+}: {
+  setLogin: (state: boolean) => void;
+}) {
+  const authContext = useContext(AuthContext);
+  if (!authContext) {
+    throw new Error("AuthContext is not available");
+  }
+  const { signUp } = authContext;
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (password !== confirmPassword) {
-      setPasswordError("Passwords do not match");
-      return;
+  const [state, formAction] = useActionState(
+    async (prevState: SignupSchemaTypes, formData: FormData) => {
+      return await handleForm(prevState, formData, signUp, setLogin);
+    },
+    {
+      name: "",
+      email: "",
+      password: "",
+      errors: {
+        name: [],
+        email: [],
+        password: [],
+      },
     }
-    setPasswordError("");
-    // Add signup logic here
-  };
+  );
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className="flex flex-col gap-6">
       <Card className="bg-neutral-950 text-zinc-200 border-1 border-zinc-800">
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Create an account</CardTitle>
-          <CardDescription>
-            Sign up with your Google account
-          </CardDescription>
+          <CardDescription>Sign up with your Google account</CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit}>
+          <form action={formAction}>
             <div className="grid gap-6">
               <div className="flex flex-col gap-4">
-                
                 <Button
                   type="button"
                   variant="outline"
@@ -66,55 +73,76 @@ export function SignupForm({
               </div>
               <div className="grid gap-6">
                 <div className="grid gap-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="m@example.com"
-                    required
-                    className="border-1 border-zinc-800"
-                  />
+                  <Label htmlFor="name">Name</Label>
+                  <div>
+                    <Input
+                      id="name"
+                      type="text"
+                      name="name"
+                      placeholder="me"
+                      className="border-1 text-xs border-zinc-800"
+                    />
+                    {state.errors?.name &&
+                      state.errors.name[0] !== "Success" && (
+                        <p className="text-xs text-red-400">
+                          {state.errors.name[0]}
+                        </p>
+                      )}
+                  </div>
+                </div>
+                <div className="grid gap-2">
+                  <div className="flex items-center">
+                    <Label htmlFor="email">Email</Label>
+                  </div>
+                  <div>
+                    <Input
+                      id="email"
+                      type="email"
+                      name="email"
+                      placeholder="Email"
+                      className="flex text-xs items-center border-1 border-zinc-800"
+                    />
+                    {state.errors?.email && (
+                      <p className="text-xs text-red-400">
+                        {state.errors.email[0]}
+                      </p>
+                    )}
+                  </div>
                 </div>
                 <div className="grid gap-2">
                   <div className="flex items-center">
                     <Label htmlFor="password">Password</Label>
                   </div>
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="********"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="flex items-center border-1 border-zinc-800"
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <div className="flex items-center">
-                    <Label htmlFor="confirm-password">Confirm Password</Label>
+                  <div>
+                    <Input
+                      id="password"
+                      type="password"
+                      name="password"
+                      placeholder="********"
+                      className="flex items-center border-1 border-zinc-800"
+                    />
+                    {state.errors?.password && (
+                      <p className="text-xs text-red-400">
+                        {state.errors.password[0]}
+                      </p>
+                    )}
                   </div>
-                  <Input
-                    id="confirm-password"
-                    type="password"
-                    placeholder="********"
-                    required
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="flex items-center border-1 border-zinc-800"
-                  />
-                  {passwordError && (
-                    <p className="text-red-500 text-sm mt-1">{passwordError}</p>
-                  )}
                 </div>
-                <Button type="submit" className="w-full">
+                <Button
+                  type="submit"
+                  className="w-full border-1 hover:bg-neutral-800 border-zinc-800 cursor-pointer"
+                >
                   Create Account
                 </Button>
               </div>
               <div className="text-center text-sm">
                 Already have an account?{" "}
-                <a href="#" className="underline underline-offset-4">
+                <span
+                  onClick={() => setLogin(true)}
+                  className="underline cursor-pointer underline-offset-4"
+                >
                   Log in
-                </a>
+                </span>
               </div>
             </div>
           </form>
