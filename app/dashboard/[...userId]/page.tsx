@@ -1,6 +1,6 @@
 const Page=()=>{
     return(
-        <p>kk</p>
+        <p >kk</p>
     )
 }
 

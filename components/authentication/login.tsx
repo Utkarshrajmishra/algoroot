@@ -10,12 +10,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export function LoginForm({
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<"div">) {
+export function LoginForm() {
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className="flex flex-col gap-6">
       <Card className="bg-neutral-950 text-zinc-200 border-1 border-zinc-800">
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Welcome back</CardTitle>
