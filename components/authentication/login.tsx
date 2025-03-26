@@ -38,7 +38,7 @@ export function LoginForm() {
                 </Button>
               </div>
               <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
-                <span className="relative z-10 bg-neutral-800 py-1 px-2 rounded text-zinc-400 text-muted-foreground">
+                <span className="relative z-10 bg-neutral-800 py-1 px-2 rounded text-zinc-400 ">
                   Or continue with
                 </span>
               </div>

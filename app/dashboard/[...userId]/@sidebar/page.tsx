@@ -3,7 +3,6 @@
 import { cn } from "@/lib/utils";
 import {
   Bell,
-  BriefcaseBusiness,
   ChevronDown,
   Home,
   BadgeIcon as IdCard,

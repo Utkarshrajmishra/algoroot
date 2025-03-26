@@ -1,6 +1,8 @@
 const Page=()=>{
     return(
-        <p >kk</p>
+        <section>
+            <p>Dashboard</p>
+        </section>
     )
 }
 
