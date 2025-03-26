@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Loader } from "lucide-react";
 
 export type RecipesType = {
   id: number;
@@ -108,7 +109,9 @@ const Page = () => {
   };
 
   if (loading) {
-    return <div className="p-4">Loading...</div>;
+    return <div className="flex h-screen w-screen items-center justify-center">
+      <Loader className="text-zinc-200 animate-spin"/>
+    </div>;
   }
 
   return (
