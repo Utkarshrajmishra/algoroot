@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useActionState, useContext, useState } from "react";
+import { useActionState, useContext } from "react";
 import { handleForm, SignupSchemaTypes } from "@/actions/signup-action";
 import { AuthContext } from "@/context/auth-context";
 
