@@ -63,14 +63,14 @@ export async function handleForm(
     //     redirect(`dashboard/${result.id}`);
 
   }else{
-    // toast("Error occurred", {
-    //   description: result.message,
-    //   style: {
-    //     background: "#0a0a0a",
-    //     border: "1px solid #27272a",
-    //     color: "#ffffff",
-    //   },
-    // });
+    toast("Error occurred", {
+      description: result.message,
+      style: {
+        background: "#0a0a0a",
+        border: "1px solid #27272a",
+        color: "#ffffff",
+      },
+    });
     return {
       email,
       password,

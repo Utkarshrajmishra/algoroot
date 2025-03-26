@@ -7,20 +7,26 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AuthContext } from "@/context/auth-context";
-import {  useActionState, useContext } from "react";
+import { useActionState, useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { Loader } from "lucide-react";
 
-export function LoginForm({ setLogin }: { setLogin: (state: boolean) => void }) {
-
-  const authContext=useContext(AuthContext)
-  if(!authContext){
-    throw new Error('Auth Context not found')
+export function LoginForm({
+  setLogin,
+}: {
+  setLogin: (state: boolean) => void;
+}) {
+  const [loading, setLoading] = useState(false);
+  const authContext = useContext(AuthContext);
+  if (!authContext) {
+    throw new Error("Auth Context not found");
   }
-  const {login}=authContext
-
+  const { login, user } = authContext;
+  const router = useRouter();
   const [state, formAction] = useActionState(
     async (prevState: LoginSchemaTypes, formData: FormData) => {
       return await handleForm(prevState, formData, login, setLogin, toast);
@@ -35,6 +41,12 @@ export function LoginForm({ setLogin }: { setLogin: (state: boolean) => void }) 
     }
   );
 
+  useEffect(() => {
+    if (user && user.id) {
+      setLoading(true);
+      router.push(`/dashboard/${user.id}`);
+    }
+  }, [user]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -77,7 +89,9 @@ export function LoginForm({ setLogin }: { setLogin: (state: boolean) => void }) 
                   />
                 </div>
                 {state.errors?.email && state.errors.email[0] !== "Success" && (
-                  <p className="text-xs text-red-400">{state.errors.email[0]}</p>
+                  <p className="text-xs text-red-400">
+                    {state.errors.email[0]}
+                  </p>
                 )}
               </div>
               <div className="grid gap-2">
@@ -99,8 +113,18 @@ export function LoginForm({ setLogin }: { setLogin: (state: boolean) => void }) 
                   )}
                 </div>
               </div>
-              <Button type="submit" className="w-full border-1 hover:bg-neutral-800 border-zinc-800 cursor-pointer">
-                Login
+              <Button
+                type="submit"
+                className={`w-full border-1 hover:bg-neutral-800 border-zinc-800 cursor-pointer`}
+              >
+                {loading ? (
+                  <div className="'animate-spin">
+                    {" "}
+                    <Loader />
+                  </div>
+                ) : (
+                  "Login"
+                )}
               </Button>
             </form>
             <div className="text-center text-sm">
