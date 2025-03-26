@@ -120,7 +120,7 @@ export function LoginForm({
                 {loading ? (
                   <div className="'animate-spin">
                     {" "}
-                    <Loader />
+                    <Loader className="animate-spin"/>
                   </div>
                 ) : (
                   "Login"
