@@ -19,7 +19,9 @@ const Profile = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="rounded-full h-10 w-10 outline-1 outline-blue-200 cursor-pointer"></div>
+        <div className="rounded-full flex items-center justify-center h-10 w-10 outline-1 outline-blue-200 bg-neutral-900 cursor-pointer">
+          <User className="size-6 text-zinc-200"/>
+        </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-fit font-inter bg-neutral-950 text-white outline-1 outline-zinc-800">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>

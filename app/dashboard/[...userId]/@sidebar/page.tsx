@@ -1,5 +1,6 @@
 "use client";
 
+import { useSidebar } from "@/context/sidebar-context";
 import { cn } from "@/lib/utils";
 import {
   Bell,
@@ -7,7 +8,6 @@ import {
   Home,
   BadgeIcon as IdCard,
   Library,
-  Plus,
   Settings,
 } from "lucide-react";
 
@@ -41,8 +41,9 @@ const Menu = [
 ];
 
 const Sidebar = () => {
+  const {isMobileMenuOpen} =useSidebar()
   return (
-    <div className="w-[280px] hidden bg-black/20 border-r border-r-zinc-800 flex flex-col h-screen justify-between">
+    <div className={`w-[280px] ${isMobileMenuOpen?'inline-block':'hidden'} lg:inline-block bg-black/20 border-r border-r-zinc-800 flex flex-col h-screen justify-between`}>
       <div>
         <div className="flex-none px-4 py-4">
           <section className="w-full bg-zinc-900 hover:bg-zinc-800/50 transition-all duration-200 border border-zinc-800/30 rounded-lg p-2.5 flex items-center justify-between group">
@@ -84,7 +85,7 @@ const Sidebar = () => {
         </div>
       </div>
 
-      <div className="flex-none p-4 border-t border-zinc-800/30 bg-zinc-900/20">
+      {/* <div className="flex-none p-4 border-t border-zinc-800/30 bg-zinc-900/20">
         <button className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-zinc-800/30 transition-all duration-200">
           <div className="size-9 rounded-full bg-gradient-to-br from-indigo-600 to-indigo-800 flex items-center justify-center ring-2 ring-zinc-800">
             <span className="text-sm font-medium text-white">U</span>
@@ -95,7 +96,7 @@ const Sidebar = () => {
           </div>
           <ChevronDown className="size-4 text-zinc-500" />
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };
