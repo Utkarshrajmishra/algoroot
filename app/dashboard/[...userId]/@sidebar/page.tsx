@@ -43,7 +43,7 @@ const Menu = [
 const Sidebar = () => {
   const {isMobileMenuOpen} =useSidebar()
   return (
-    <div className={`w-[280px] ${isMobileMenuOpen?'inline-block':'hidden'} lg:inline-block bg-black/20 border-r border-r-zinc-800 flex flex-col h-screen justify-between`}>
+    <div className={`md:w-[280px] w-[55%] ${isMobileMenuOpen?'inline-block':'hidden'} lg:inline-block bg-black/20 border-r border-r-zinc-800 flex flex-col h-screen justify-between`}>
       <div>
         <div className="flex-none px-4 py-4">
           <section className="w-full bg-zinc-900 hover:bg-zinc-800/50 transition-all duration-200 border border-zinc-800/30 rounded-lg p-2.5 flex items-center justify-between group">
@@ -62,7 +62,7 @@ const Sidebar = () => {
             <h2 className="px-2 text-xs font-semibold text-zinc-200 uppercase tracking-wider mb-2">
               Menu
             </h2>
-            <nav className="space-y-1">
+            <nav className="md:space-y-1 space-y-2">
               {Menu?.map((item, index) => (
                 <button
                   key={item.id}
