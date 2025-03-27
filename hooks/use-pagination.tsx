@@ -1,37 +1,39 @@
-import { RecipesType } from "@/app/dashboard/[...userId]/page";
+"use client";
+
 import { useState, useMemo } from "react";
 
-interface UsePaginationProps {
-  data: RecipesType[] | undefined;
-  dataLength?: number;
+interface UsePaginationProps<T> {
+  data: T[] | undefined;
+  dataLength: number;
   itemsPerPage?: number;
 }
 
-export function usePagination({
-    data,
-  dataLength=0,
+export function usePagination<T>({
+  data,
+  dataLength,
   itemsPerPage = 10,
-}: UsePaginationProps) {
-  const [currentPage, setCurrentPage] = useState(1);
+}: UsePaginationProps<T>) {
+  const [currentPage, setCurrentPage] = useState(0);
 
   const paginatedData = useMemo(() => {
-    const startIndex = Math.abs((currentPage - 1) * itemsPerPage);
+    if (!data) return [];
+
+    const startIndex = currentPage * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    return data?.slice(startIndex, endIndex);
-  }, [dataLength, currentPage, itemsPerPage]);
+    return data.slice(startIndex, endIndex);
+  }, [data, currentPage, itemsPerPage]);
 
   const totalPages = useMemo(() => {
-    return Math.ceil(dataLength / itemsPerPage);
+    return Math.max(1, Math.ceil(dataLength / itemsPerPage));
   }, [dataLength, itemsPerPage]);
 
   const nextPage = () => {
-    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1));
   };
 
   const prevPage = () => {
-    setCurrentPage((prev) => Math.max(prev - 1, 1));
+    setCurrentPage((prev) => Math.max(prev - 1, 0));
   };
-
 
   return {
     currentPage,
@@ -39,7 +41,6 @@ export function usePagination({
     nextPage,
     prevPage,
     totalPages,
-    setCurrentPage
-    
+    setCurrentPage,
   };
 }

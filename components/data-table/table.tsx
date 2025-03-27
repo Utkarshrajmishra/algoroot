@@ -1,4 +1,4 @@
-import { RecipesType } from "@/app/dashboard/[...userId]/page";
+import type { RecipesType } from "@/app/dashboard/[...userId]/page";
 import {
   Table,
   TableBody,
@@ -37,10 +37,10 @@ export function DataTable({ recipes }: Props) {
                 <TableCell>{item.cookTimeMinutes}</TableCell>
                 <TableCell>
                   <p
-                    className={`px-3  p- ${
-                      item.difficulty === "Easy"
+                    className={`px-3 ${
+                      item.difficulty.toLowerCase() === "easy"
                         ? "bg-emerald-500"
-                        : item.difficulty === "Medium"
+                        : item.difficulty.toLowerCase() === "medium"
                         ? "bg-yellow-500"
                         : "bg-red-500"
                     } w-fit h-fit text-white rounded`}

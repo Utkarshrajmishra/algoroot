@@ -49,8 +49,7 @@ const Page = () => {
           throw new Error("Failed to fetch recipes");
         }
         const result = await response.json();
-        setData(result)
-        console.log(result)
+        setData(result);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -60,43 +59,40 @@ const Page = () => {
     fetchRecipes();
   }, []);
 
+  // Filter and sort recipes
+  const filteredAndSortedRecipes = useMemo(() => {
+    if (!data?.recipes) return [];
 
-    const filteredAndSortedRecipes = useMemo(() => {
-      if (!data?.recipes) return [];
+    return data.recipes
+      .filter(
+        (recipe) =>
+          (searchTerm.trim() === "" ||
+            recipe.name.toLowerCase().includes(searchTerm.toLowerCase())) &&
+          (difficultyFilter === "" ||
+            recipe.difficulty.toLowerCase() === difficultyFilter.toLowerCase())
+      )
+      .sort((a, b) =>
+        sortOrder === "asc"
+          ? a.cookTimeMinutes - b.cookTimeMinutes
+          : b.cookTimeMinutes - a.cookTimeMinutes
+      );
+  }, [data?.recipes, searchTerm, difficultyFilter, sortOrder]);
 
-      return data.recipes
-        .filter(
-          (recipe) =>
-            (searchTerm === "" ||
-              recipe.name.toLowerCase().includes(searchTerm.toLowerCase())) &&
-            (difficultyFilter === "" ||
-              recipe.difficulty.toLowerCase() ===
-                difficultyFilter.toLowerCase())
-        )
-        .sort((a, b) => {
-          if (sortOrder === "asc") {
-            return a.cookTimeMinutes - b.cookTimeMinutes;
-          } else {
-            return b.cookTimeMinutes - a.cookTimeMinutes;
-          }
-        });
-    }, [data?.recipes, searchTerm, difficultyFilter, sortOrder]);
-
-
-
-  
+  // Pagination Hook
   const {
     currentPage,
     totalPages,
     nextPage,
     paginatedData,
     prevPage,
-    setCurrentPage
-  } = usePagination({
+    setCurrentPage,
+  } = usePagination<RecipesType>({
     data: filteredAndSortedRecipes,
     dataLength: filteredAndSortedRecipes.length,
+    itemsPerPage: 10,
   });
 
+  // Reset pagination when filters change
   useEffect(() => {
     setCurrentPage(0);
   }, [searchTerm, difficultyFilter, sortOrder, setCurrentPage]);
@@ -109,14 +105,18 @@ const Page = () => {
   };
 
   if (loading) {
-    return <div className="flex h-screen w-screen items-center justify-center">
-      <Loader className="text-zinc-200 animate-spin"/>
-    </div>;
+    return (
+      <div className="flex h-screen w-screen items-center justify-center">
+        <Loader className="text-zinc-200 animate-spin" />
+      </div>
+    );
   }
 
   return (
     <section className="p-2 md:p-4">
-      <div className="flex flex-col gap-2 md:flex-row justify-between mb-4 space-x-4">
+      {/* Filters */}
+      <div className="flex flex-col gap-2 md:flex-row justify-between mb-4 md:space-x-4">
+        {/* Search Input */}
         <Input
           className="md:w-[40%] w-full border-1 border-zinc-700 bg-neutral-900/40 text-sm text-zinc-200 focus:outline-none focus:border-0"
           placeholder="Search by name"
@@ -126,21 +126,23 @@ const Page = () => {
 
         <div className="flex gap-1">
           {/* Difficulty Filter */}
-          <Select value={difficultyFilter} onValueChange={setDifficultyFilter}>
+          <Select
+            value={difficultyFilter}
+            onValueChange={(value) => setDifficultyFilter(value || "")}
+          >
             <SelectTrigger className="w-[120px] border-1 border-zinc-700 bg-neutral-950/40 text-sm text-zinc-200">
               <SelectValue placeholder="Difficulty" />
             </SelectTrigger>
             <SelectContent className="border-1 border-zinc-700 bg-neutral-950 text-white">
-            <SelectItem value="easy">Easy</SelectItem>
+              <SelectItem value="easy">Easy</SelectItem>
               <SelectItem value="medium">Medium</SelectItem>
               <SelectItem value="hard">Hard</SelectItem>
             </SelectContent>
           </Select>
 
-          {/* Sort by Cook Time */}
           <Select
             value={sortOrder}
-            onValueChange={(value: "asc" | "desc") => setSortOrder(value)}
+            onValueChange={(value) => setSortOrder(value as "asc" | "desc")}
           >
             <SelectTrigger className="w-[150px] border-1 border-zinc-700 bg-neutral-950/40 text-sm text-zinc-200">
               <SelectValue placeholder="Sort Cook Time" />
@@ -161,13 +163,14 @@ const Page = () => {
         </div>
       </div>
 
+      {/* Recipe Table */}
       <div className="mt-4">
-    
         {paginatedData && filteredAndSortedRecipes.length > 0 ? (
           <>
             <DataTable recipes={paginatedData} />
 
-            <div className="mt-4 flex justify-center  md:justify-end gap-6">
+            {/* Pagination Controls */}
+            <div className="mt-4 flex justify-center md:justify-end gap-6">
               <Button
                 className="border-1 border-zinc-700 bg-neutral-900/40"
                 onClick={prevPage}
@@ -180,7 +183,7 @@ const Page = () => {
               </span>
               <Button
                 onClick={nextPage}
-                disabled={currentPage === totalPages - 1}
+                disabled={currentPage >= totalPages - 1}
                 className="border-1 border-zinc-700 bg-neutral-900/40"
               >
                 Next

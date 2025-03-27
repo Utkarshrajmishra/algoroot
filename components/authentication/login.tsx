@@ -88,11 +88,13 @@ export function LoginForm({
                     className="border-1 border-zinc-800"
                   />
                 </div>
-                {state.errors?.email && state.errors.email[0] !== "Success" && (
-                  <p className="text-xs text-red-400">
-                    {state.errors.email[0]}
-                  </p>
-                )}
+                {state.errors?.email &&
+                  state.errors.email[0] !== "Success" &&
+                  state.errors.email[0] !== "Not-Success" && (
+                    <p className="text-xs text-red-400">
+                      {state.errors.email[0]}
+                    </p>
+                  )}
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
@@ -120,7 +122,7 @@ export function LoginForm({
                 {loading ? (
                   <div className="'animate-spin">
                     {" "}
-                    <Loader className="animate-spin"/>
+                    <Loader className="animate-spin" />
                   </div>
                 ) : (
                   "Login"
