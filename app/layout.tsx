@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/auth-context";
 import { Toaster } from "@/components/ui/sonner";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,6 +30,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Script
+          src="https://cdn.peasy.so/peasy.js"
+          data-website-id="01jqaygkvyf509xv5h25zwd128"
+          strategy="afterInteractive"
+        />
         <AuthProvider>{children}</AuthProvider>
         <Toaster />
       </body>
