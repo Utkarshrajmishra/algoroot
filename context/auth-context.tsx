@@ -23,6 +23,7 @@ type AuthContextType = {
     name: string
   ) => { success: boolean; message: string };
   logout: () => void;
+  deleteAccount: (id: string) => { success: boolean; message: string };
 };
 
 export const AuthContext = createContext<AuthContextType>({
@@ -31,8 +32,11 @@ export const AuthContext = createContext<AuthContextType>({
   login: () => ({ success: false, message: "Function not initialized" }),
   signUp: () => ({ success: false, message: "Function not initialized" }),
   logout: () => {},
+  deleteAccount: (id: string) => ({
+    success: false,
+    message: "Function not initialized",
+  }),
 });
-
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -44,7 +48,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const foundUser = user.find((u: User) => u.email === email);
     if (!foundUser || foundUser.password !== password) {
       setLoading(false);
-      return { success: false, message: "Invalid email or password", id:"" };
+      return { success: false, message: "Invalid email or password", id: "" };
     }
     setLoading(true);
     setUser(foundUser);
@@ -71,23 +75,33 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       email: email,
       password: password,
     });
-    localStorage.setItem("user", JSON.stringify(user))
+    localStorage.setItem("user", JSON.stringify(user));
     setLoading(false);
-          return { success: true, message: "Registered successfully" };
+    return { success: true, message: "Registered successfully" };
+  };
+
+  const logout = () => {
+    setUser(null);
+  };
+
+  const deleteAccount = (id: string) => {
+    const user = JSON.parse(localStorage.getItem("user") || "[]");
+
+    const userIndex = user.findIndex((u: User) => u.id === id);
+    if(!userIndex) return {success:false, message:'Invalid user id'}
+    user.splice(userIndex,1);
+        localStorage.setItem("user", JSON.stringify(user));
+        return {success:true, message:'Account deleted successfully!'}
+
 
   };
 
-  const logout=()=>{
-    setUser(null)
-  }
-
-  return(
-    <AuthContext.Provider value={{user, isLoading, signUp, login, logout }}>
-        {children}
+  return (
+    <AuthContext.Provider value={{ user, isLoading, signUp, login, logout, deleteAccount }}>
+      {children}
     </AuthContext.Provider>
-  )
+  );
 };
-
 
 export function useAuth() {
   const context = useContext(AuthContext);
