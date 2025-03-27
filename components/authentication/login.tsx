@@ -84,6 +84,7 @@ export function LoginForm({
                     id="email"
                     type="email"
                     name="email"
+                    defaultValue={state?.email}
                     placeholder="m@example.com"
                     className="border-1 border-zinc-800"
                   />
@@ -105,6 +106,7 @@ export function LoginForm({
                     id="password"
                     type="password"
                     name="password"
+                    defaultValue={state?.password}
                     placeholder="********"
                     className="flex items-center border-1 border-zinc-800"
                   />

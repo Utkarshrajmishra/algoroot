@@ -79,6 +79,7 @@ export function SignupForm({
                       id="name"
                       type="text"
                       name="name"
+                      defaultValue={state?.name}
                       placeholder="me"
                       className="border-1 text-xs border-zinc-800"
                     />
@@ -97,6 +98,7 @@ export function SignupForm({
                   <div>
                     <Input
                       id="email"
+                      defaultValue={state?.email}
                       type="email"
                       name="email"
                       placeholder="Email"
@@ -118,6 +120,8 @@ export function SignupForm({
                       id="password"
                       type="password"
                       name="password"
+                      defaultValue={state?.password}
+
                       placeholder="********"
                       className="flex items-center border-1 border-zinc-800"
                     />

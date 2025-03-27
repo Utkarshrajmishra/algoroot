@@ -9,7 +9,7 @@ const SignupSchema = z.object({
     .min(1, { message: "Email is required" }),
   password: z
     .string()
-    .min(8, { message: "Password must be atleast 8 characters long" })
+    .min(8, { message: "Password must be atleast 8 characters long" }),
 });
 
 export type SignupSchemaTypes = {
@@ -27,7 +27,7 @@ export async function handleForm(
   _prevState: SignupSchemaTypes,
   formData: FormData,
   signUp: any,
-  setLogin:(state:boolean)=>void,
+  setLogin: (state: boolean) => void
 ) {
   const name = formData.get("name") as string;
   const email = formData.get("email") as string;
@@ -59,6 +59,8 @@ export async function handleForm(
         color: "#ffffff",
       },
     });
+
+        return { name: "", email: "", password: "", errors: {} };
   } else {
     toast("Error occurred", {
       description: result.message,
