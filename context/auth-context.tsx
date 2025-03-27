@@ -84,13 +84,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(null);
   };
 
-  const deleteAccount = (id: string) => {
+  const deleteAccount = (id: string | undefined) => {
+    console.log(id)
+    if(!id) return { success: false, message: "Invalid user id" };
     const user = JSON.parse(localStorage.getItem("user") || "[]");
 
     const userIndex = user.findIndex((u: User) => u.id === id);
-    if(!userIndex) return {success:false, message:'Invalid user id'}
+    console.log(userIndex)
+    if(userIndex==null) return {success:false, message:'Invalid user id'}
+    //deleting user
     user.splice(userIndex,1);
         localStorage.setItem("user", JSON.stringify(user));
+        setUser(null)
         return {success:true, message:'Account deleted successfully!'}
 
 
